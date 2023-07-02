@@ -1,20 +1,22 @@
+import time
+
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.edge.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from Pages.PageObject import PageObject
 
-
-class LoginPage(PageObject):
-    _url_login: str = "https://opensource-demo.orangehrmlive.com"
-    #"ControlID-4"
-
-    def __init__(self, browser):
-        super(LoginPage, self).__init__(browser=browser)
+class LoginPage():
+    def __init__(self):
+        edge_options = Options()
+        edge_driver_path = r'C:\Users\emers\PycharmProjects\projeto_orange\edgedriver\msedgedriver.exe'
+        self.driver = webdriver.Edge(executable_path=edge_driver_path, options=edge_options)
+        self._url_login = "https://opensource-demo.orangehrmlive.com"
         self.driver.get(self._url_login)
-    def click_login_btn(self):
-        self.driver.find_element_by_xpath('//*[@id="app"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[3]/button').click()
+        self.driver.implicitly_wait(5)
 
-    def login(self, username:str='Admin', passwd:str='admin123'):
-        self.driver.find_element_by_xpath('//*[@id="app"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[1]/div/div[2]/input').send_keys(username)
-        self.driver.find_element_by_xpath('//*[@id="app"]/div[1]/div/div[1]/div/div[2]/div[2]/form/div[2]/div/div[2]/input').send_keys(passwd)
-        self.click_login_btn()
+
+    def login(self, username: str = 'Admin', passwd: str = 'admin123'):
+        self.driver.find_element(By.CSS_SELECTOR, '[name="username"]').send_keys(username)
+        self.driver.find_element(By.CSS_SELECTOR, '[name="password"]').send_keys(passwd)
+        self.driver.find_element(By.CSS_SELECTOR, '[type="submit"]').click()
